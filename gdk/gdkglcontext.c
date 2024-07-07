@@ -2371,6 +2371,7 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
                                  strides,
                                  offsets))
     {
+      /* 暂时先屏蔽掉，总是报该错误 */
       // g_warning ("eglExportDMABUFImage failed: %#x", eglGetError ());
       goto out;
     }
