@@ -1,7 +1,5 @@
-/subprojects/cairo/
-/subprojects/harfbuzz/
-/subprojects/pango/
-/subprojects/wayland/
-/subprojects/wayland-protocols/
+subprojects/*/
+!subprojects/*.wrap/
+/build/
 /build/
 .flatpak-builder/
