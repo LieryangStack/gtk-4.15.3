@@ -4,5 +4,4 @@
 /subprojects/wayland/
 /subprojects/wayland-protocols/
 /build/
-/build-aux/
 .flatpak-builder/
