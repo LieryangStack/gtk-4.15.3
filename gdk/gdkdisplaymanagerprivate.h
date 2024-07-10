@@ -31,16 +31,18 @@ struct _GdkDisplayManager
 {
   GObject parent_instance;
 
-  GdkDisplay *default_display;
+  /* 显示管理对象中，默认的 GdkDisplay 调用打开Display函数的时候，会设置该变量*/
+  GdkDisplay *default_display; 
 
-  GSList *displays;
+  /* 显示管理对象中，可以有很多个 GdkDisplay 对象 */
+  GSList *displays; 
 };
 
 struct _GdkDisplayManagerClass
 {
   GObjectClass parent_class;
 
-  /* signals */
+  /* display-opened 信号，默认信号处理回调函数 */
   void         (*display_opened)      (GdkDisplayManager *manager,
                                        GdkDisplay        *display);
 };

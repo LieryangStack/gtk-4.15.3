@@ -123,6 +123,7 @@ static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
+/* 抽象对象 */
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
 
 static gboolean

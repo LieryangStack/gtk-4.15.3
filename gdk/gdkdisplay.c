@@ -1187,7 +1187,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  * gdk_display_open:
  * @display_name: (nullable): the name of the display to open
  *
- * Opens a display.
+ * 打开静态显示管理对象 GdkDisplayManager 中的支持的后端Display ，并且设置成默认的 
  *
  * If opening the display fails, `NULL` is returned.
  *

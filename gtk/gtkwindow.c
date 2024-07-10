@@ -531,11 +531,11 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
 						gtk_window_accessible_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,   /* 实现了GtkNative接口 */
 						gtk_window_native_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
 						gtk_window_shortcut_manager_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,  /* 实现了GtkRoot接口 */
 						gtk_window_root_interface_init))
 
 static GtkAccessibleInterface *parent_accessible_iface;

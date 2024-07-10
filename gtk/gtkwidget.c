@@ -7224,6 +7224,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  /* 判断 G_OBJECT_TYPE (widget) 是不是 widget_type 的子类型 */
   while (widget && !g_type_is_a (G_OBJECT_TYPE (widget), widget_type))
     {
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);

@@ -254,6 +254,8 @@ struct _GdkBackend {
   GdkDisplay * (* open_display) (const char *name);
 };
 
+
+/* 这里定义了的 Gdk 所有支持的显示后端名称，以及open该后端的函数指针 */
 static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_MACOS
   { "macos",   _gdk_macos_display_open },
@@ -277,7 +279,7 @@ static GdkBackend gdk_backends[] = {
 /**
  * gdk_display_manager_get:
  *
- * Gets the singleton `GdkDisplayManager` object.
+ * 得到一个静态的 GdkDisplayManager 对象 （多次调用该函数，返回的都是同一个对象）
  *
  * When called for the first time, this function consults the
  * `GDK_BACKEND` environment variable to find out which of the
@@ -371,7 +373,7 @@ gdk_display_manager_list_displays (GdkDisplayManager *manager)
  * @manager: a `GdkDisplayManager`
  * @name: (nullable): the name of the display to open
  *
- * Opens a display.
+ *  根据环境变量 GDK_BACKEND 打开一个 GdkDisplay， 并且返回该对象
  *
  * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL
  *   if the display could not be opened

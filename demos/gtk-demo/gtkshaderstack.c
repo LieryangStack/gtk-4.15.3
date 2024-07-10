@@ -205,8 +205,8 @@ gtk_shader_stack_size_allocate (GtkWidget *widget,
 
 static void
 gtk_shader_stack_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
+                           GtkSnapshot *snapshot) {
+                        
   GtkShaderStack *self = GTK_SHADER_STACK (widget);
   int width, height;
   GtkWidget *current, *next;
