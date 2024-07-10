@@ -201,6 +201,7 @@ gdk_display_manager_get_property (GObject      *object,
     }
 }
 
+/* 静态变量，设置允许显示的后端 */
 static const char *allowed_backends;
 
 /**

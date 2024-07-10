@@ -208,7 +208,7 @@ typedef struct
   GtkWindow             *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GtkWindowGroup        *group;
-  GdkDisplay            *display;
+  GdkDisplay            *display; /* 等于静态显示管理对象种的默认显示 GdkDisplayManaget->default_display */
   GtkApplication        *application;
 
   int default_width;
@@ -527,13 +527,13 @@ gtk_window_update_csd_size (GtkWindow *window,
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkWindow)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,  /* 开发自定义访问方法接口 */
 						gtk_window_accessible_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,  /* XML文件构建Widget接口 */
 						gtk_window_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,   /* 实现了GtkNative接口 */
 						gtk_window_native_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER, /* 快捷键接口 */
 						gtk_window_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,  /* 实现了GtkRoot接口 */
 						gtk_window_root_interface_init))
@@ -1714,7 +1714,7 @@ gtk_window_init (GtkWindow *window)
   priv->need_default_size = TRUE;
   priv->modal = FALSE;
   priv->decorated = TRUE;
-  priv->display = gdk_display_get_default ();
+  priv->display = gdk_display_get_default (); /* 得到默认显示 */
 
   priv->state = 0;
 
@@ -4337,10 +4337,13 @@ gtk_window_realize (GtkWidget *widget)
         priv->use_client_shadow = FALSE;
     }
 
+  /* 创建GdkSurface */
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget));
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
+
+  
   if (priv->renderer == NULL)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 

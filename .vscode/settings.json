@@ -1,15 +1,3 @@
 {
-  "files.associations": {
-    "gdkdisplay.h": "c",
-    "gtkgstpaintableprivate.h": "c",
-    "config.h": "c",
-    "gtkgstmediafileprivate.h": "c",
-    "gtkmediafile.h": "c",
-    "gtkmediastream.h": "c",
-    "gdk.h": "c",
-    "gdkapplaunchcontext.h": "c",
-    "gtknative.h": "c"
-  },
-  "C_Cpp.default.compileCommands": "/opt/src/gtk-4.15.3/builddir/compile_commands.json",
   "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
 }

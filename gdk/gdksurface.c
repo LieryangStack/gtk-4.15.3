@@ -75,7 +75,7 @@ struct _GdkSurfacePrivate
   gboolean egl_surface_high_depth;
 #endif
 
-  gpointer widget;
+  gpointer widget; /* 该GdkSurface被那个GtkWidget使用了 */
 };
 
 enum {
