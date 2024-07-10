@@ -35,7 +35,7 @@ struct _GdkSurface
 {
   GObject parent_instance;
 
-  GdkDisplay *display;
+  GdkDisplay *display; /* 先创建 GdkDisplay， 再会创建 GdkSurface */
 
   GdkSurface *transient_for; /* for toplevels */
   GdkSurface *parent;        /* for popups */
