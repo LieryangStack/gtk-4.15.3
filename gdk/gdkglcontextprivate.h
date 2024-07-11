@@ -78,7 +78,7 @@ struct _GdkGLContextClass
 {
   GdkDrawContextClass parent_class;
 
-  GdkGLBackend        backend_type;
+  GdkGLBackend        backend_type; /* 后端类型 */
 
   GdkGLAPI              (* realize)                             (GdkGLContext          *context,
                                                                  GError               **error);

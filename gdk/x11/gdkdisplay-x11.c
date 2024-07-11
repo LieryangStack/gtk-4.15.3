@@ -1475,12 +1475,11 @@ gdk_x11_display_open (const char *display_name)
   /* initialize the display's screens */ 
   display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
 
-  /* If GL is available we want to pick better default/rgba visuals,
-   * as we care about GLX details such as alpha/depth/stencil depth,
-   * stereo and double buffering
-   *
-   * Note that this also sets up the leader surface while creating the initial
-   * GL context.
+  /**
+   * 如果GL是可用的，我们希望选择更好的默认/rgba视觉效果
+   * 因为我们关心 GLX 细节，例如例如 alpha/depth/stencil 深度、立体和双缓冲。
+   * 
+   * 注意： 这还会再创建初始的GL上下文上面设置主surface
    */
   if (!gdk_display_prepare_gl (display, NULL))
     {
@@ -2969,17 +2968,8 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
   XVisualInfo *visinfo;
   int visualid;
 
-  /* No env vars set, do the regular GL initialization.
-   * 
-   * We try EGL first, but are very picky about what we accept.
-   * If that fails, we try to go with GLX instead.
-   * And if that also fails, we try EGL again, but this time accept anything.
-   *
-   * The idea here is that EGL is the preferred method going forward, but GLX is
-   * the tried and tested method that we know works. So if we detect issues with
-   * EGL, we want to avoid using it in favor of GLX.
-   */
-
+  
+  /* 会先尝试对 egl 初始化， 如果egl初始化，再去尝试glx初始化 */
   if (!gdk_display_init_egl (display, EGL_PLATFORM_X11_KHR, dpy, FALSE, error))
     {
       g_clear_error (error);
@@ -3020,6 +3010,7 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
 {
   GdkX11Display *self = GDK_X11_DISPLAY (display);
 
+  /* 内部会进行 egl 初始化函数调用 */
   if (!gdk_x11_display_init_gl_backend (self, &self->window_visual, &self->window_depth, error))
     return FALSE;
 

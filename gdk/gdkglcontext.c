@@ -293,6 +293,9 @@ gdk_api_to_egl_api (GdkGLAPI api)
     }
 }
 
+/**
+ * @brief: @context 中创建 egl 上下文
+ */
 static GdkGLAPI
 gdk_gl_context_create_egl_context (GdkGLContext *context,
                                    GdkGLAPI      api,

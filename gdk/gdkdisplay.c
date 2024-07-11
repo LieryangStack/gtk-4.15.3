@@ -97,11 +97,12 @@ enum {
 typedef struct _GdkDisplayPrivate GdkDisplayPrivate;
 
 struct _GdkDisplayPrivate {
-  /* The base context that all other contexts inherit from.
-   * This context is never exposed to public API and is
-   * allowed to have a %NULL surface.
+  
+  /* 系统其他的 GdkGLContext 都是来自 @gl_context 创建的共享上下文 
+   * 此上下文不会暴露给公共API，也就意味着，外部不能使用该@gl_context
+   * 只能使用 @gl_context 创建的共享 @GdkGLContext
    */
-  GdkGLContext *gl_context;
+  GdkGLContext *gl_context; /* GdkGLContext对象私有结构体包含有 EGLContext */
   GError *gl_error;
 
 #ifdef HAVE_EGL
@@ -1370,6 +1371,7 @@ gdk_display_init_gl (GdkDisplay *self)
       return;
     }
 
+  /* 这里会对 egl 进行初始化尝试，如果egl失败，就会尝试glx  */
   context = GDK_DISPLAY_GET_CLASS (self)->init_gl (self, &priv->gl_error);
   if (context == NULL)
     return;
@@ -1398,22 +1400,12 @@ gdk_display_init_gl (GdkDisplay *self)
 /**
  * gdk_display_prepare_gl:
  * @self: a `GdkDisplay`
- * @error: return location for a `GError`
- *
- * Checks that OpenGL is available for @self and ensures that it is
- * properly initialized.
- * When this fails, an @error will be set describing the error and this
- * function returns %FALSE.
- *
- * Note that even if this function succeeds, creating a `GdkGLContext`
- * may still fail.
- *
- * This function is idempotent. Calling it multiple times will just
- * return the same value or error.
- *
- * You never need to call this function, GDK will call it automatically
- * as needed. But you can use it as a check when setting up code that
- * might make use of OpenGL.
+ * @error: 如果初始化错误，则会返回该@error
+ * @calledby: gtk_init过程中，打开默认GdkDisplay的时候，gdk_x11_display_open会调用该函数
+ *  
+ * 检查OpenGL是否可用于 @self，如果可用，则初始化OpenGL
+ * 
+ * 注意：即使函数成功，创建 GdkGLContext 仍然有可能失败。
  *
  * Returns: %TRUE if the display supports OpenGL
  *
@@ -1452,6 +1444,8 @@ gdk_display_prepare_gl (GdkDisplay  *self,
  * gdk_display_create_gl_context:
  * @self: a `GdkDisplay`
  * @error: return location for an error
+ * 
+ * 
  *
  * Creates a new `GdkGLContext` for the `GdkDisplay`.
  *
