@@ -149,7 +149,7 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
 
   if (!impl->toplevel)
     {
-      impl->toplevel = g_new0 (GdkToplevelX11, 1);
+      impl->toplevel = g_new0 (GdkToplevelX11, 1); /* 只是创建了对象内存，并没有初始化 */
       impl->toplevel->have_focused = FALSE;
       g_signal_connect (surface, "notify::state",
                         G_CALLBACK (gdk_x11_toplevel_state_callback),

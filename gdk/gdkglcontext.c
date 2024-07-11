@@ -568,6 +568,9 @@ gdk_gl_context_real_clear_current (GdkGLContext *context)
 #endif
 }
 
+/**
+ * @brief: 
+ */
 static gboolean
 gdk_gl_context_real_make_current (GdkGLContext *context,
                                   gboolean      surfaceless)
@@ -579,6 +582,9 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 
   if (priv->egl_context == NULL)
     return FALSE;
+
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  g_print ("%s = %p, surfaceless = %d\n", G_OBJECT_TYPE_NAME (surface), surface, surfaceless);
 
   if (!surfaceless)
     egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
@@ -1816,6 +1822,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
+  /* surface 区域是否需要重新绘制，surfaceless == TRUE 表示不需要 */
   surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
   masked_context = mask_context (context, surfaceless);
 
@@ -1836,6 +1843,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
           return;
         }
     }
+
 
   if (!GDK_GL_CONTEXT_GET_CLASS (context)->make_current (context, surfaceless))
     {

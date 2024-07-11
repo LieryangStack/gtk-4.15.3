@@ -3014,6 +3014,7 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
   if (!gdk_x11_display_init_gl_backend (self, &self->window_visual, &self->window_depth, error))
     return FALSE;
 
+  /* 给GdkX11Display->leader_gdk_surface 创建 GdkX11DragSurface  */
   gdk_x11_display_init_leader_surface (self);
 
   if (self->glx_config != NULL)

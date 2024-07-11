@@ -1140,6 +1140,9 @@ gdk_surface_get_egl_surface (GdkSurface *self)
   return priv->egl_surface;
 }
 
+/**
+ * @brief: 
+ */
 void
 gdk_surface_ensure_egl_surface (GdkSurface *self,
                                 gboolean    high_depth)
