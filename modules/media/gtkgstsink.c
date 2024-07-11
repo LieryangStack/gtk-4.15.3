@@ -480,8 +480,8 @@ gtk_gst_sink_show_frame (GstVideoSink *vsink,
 
   GtkGstSink *self;
   GdkTexture *texture;
-  double pixel_aspect_ratio;
-  graphene_rect_t viewport;
+  double pixel_aspect_ratio; /* 长宽比 */
+  graphene_rect_t viewport; /* 坐标x,y,长度、宽度 */
 
   GST_TRACE ("rendering buffer:%p", buf);
 

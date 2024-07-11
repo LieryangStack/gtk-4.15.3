@@ -2,6 +2,7 @@
   "C_Cpp.default.compileCommands": "/opt/src/gtk-4.15.3/builddir/compile_commands.json",
   "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
   "files.associations": {
-    "paintable.h": "c"
+    "paintable.h": "c",
+    "gdkdmabufprivate.h": "c"
   }
 }
