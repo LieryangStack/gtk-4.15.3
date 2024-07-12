@@ -1371,13 +1371,19 @@ gdk_display_init_gl (GdkDisplay *self)
       return;
     }
 
-  /* 这里会对 egl 进行初始化尝试，如果egl失败，就会尝试glx  */
+  /**
+   * 这里会完成egl上下文创建前的所有工作，egl得到显示、egl初始化、egl选择配置
+   * 创建了 GdkX11DragSurface  GdkX11GLContextEGL
+   */
   context = GDK_DISPLAY_GET_CLASS (self)->init_gl (self, &priv->gl_error);
   if (context == NULL)
     return;
 
   before2 = GDK_PROFILER_CURRENT_TIME;
 
+  /**
+   * 这里对 GdkX11GLContextEGL 中的私有结构体 priv->egl_context = eglCreateContext
+   */
   if (!gdk_gl_context_realize (context, &priv->gl_error))
     {
       g_object_unref (context);

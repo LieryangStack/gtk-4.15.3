@@ -2969,7 +2969,7 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
   int visualid;
 
   
-  /* 会先尝试对 egl 初始化， 如果egl初始化，再去尝试glx初始化 */
+  /* 会先尝试对 egl 初始化， 如果 eglInitialize 失败，再去尝试glx初始化 */
   if (!gdk_display_init_egl (display, EGL_PLATFORM_X11_KHR, dpy, FALSE, error))
     {
       g_clear_error (error);
@@ -3006,17 +3006,26 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
 
 static GdkGLContext *
 gdk_x11_display_init_gl (GdkDisplay  *display,
-                         GError     **error)
-{
+                         GError     **error) {
   GdkX11Display *self = GDK_X11_DISPLAY (display);
 
-  /* 内部会进行 egl 初始化函数调用 */
+  /**
+   * 首选对egl进行初始化，如果egl成功初始化，使用egl，否则对glx进行初始化
+   * 调用了 eglGetDisplay
+   *       eglInitialize
+   *       eglChooseConfig
+   */
   if (!gdk_x11_display_init_gl_backend (self, &self->window_visual, &self->window_depth, error))
     return FALSE;
 
-  /* 给GdkX11Display->leader_gdk_surface 创建 GdkX11DragSurface  */
+  /**
+   * 根据 GdkX11Display->leader_gdk_surface 创建 GdkX11DragSurface
+   * EGLSurface会在渲染事件开始前创建，GdkX11DragSurface一般不需要EGLSurface
+   *                               GdkX11Toplevel渲染前需要创建EGLSurface
+   */
   gdk_x11_display_init_leader_surface (self);
 
+  /* 指定GdkSurface，创建GdkX11GLContextEGL */
   if (self->glx_config != NULL)
     return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", self->leader_gdk_surface, NULL);
   else if (gdk_display_get_egl_display (display))

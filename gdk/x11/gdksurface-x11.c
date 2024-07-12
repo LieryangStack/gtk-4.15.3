@@ -147,7 +147,7 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
 
   impl = GDK_X11_SURFACE (surface);
 
-  if (!impl->toplevel)
+  if (!impl->toplevel) /* 初始创建的  */
     {
       impl->toplevel = g_new0 (GdkToplevelX11, 1); /* 只是创建了对象内存，并没有初始化 */
       impl->toplevel->have_focused = FALSE;
@@ -904,9 +904,7 @@ setup_toplevel_window (GdkSurface *surface)
 
   set_wm_protocols (surface);
 
-  /* The focus surface is off the visible area, and serves to receive key
-   * press events so they don't get sent to child surfaces.
-   */
+  /* focus surface 并不是可见区域，是用来接收按键事件，以防这些事件被发送到 child surfaces */
   toplevel->focus_window = create_focus_window (display, xid);
   _gdk_x11_display_add_window (display,
                                &toplevel->focus_window,

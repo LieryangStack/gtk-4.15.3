@@ -167,6 +167,7 @@ struct _GdkDisplayClass
 
   GdkKeymap *            (*get_keymap)                 (GdkDisplay        *display);
 
+  /* Display 类型创建相应的 GdkGLContext 对象 */
   GdkGLContext *         (* init_gl)                   (GdkDisplay        *display,
                                                         GError           **error);
   /* Returns the distance from a perfect score EGL config.
