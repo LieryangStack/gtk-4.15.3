@@ -376,11 +376,14 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   return texture;
 }
 
+/**
+ * @brief: UI界面渲染函数
+ */
 static void
 gsk_gpu_renderer_render (GskRenderer          *renderer,
                          GskRenderNode        *root,
-                         const cairo_region_t *region)
-{
+                         const cairo_region_t *region) {
+
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuFrame *frame;
@@ -394,12 +397,15 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
       return;
     }
 
+  /* 渲染之前准备工作，确保egl_surface创建 */
   gdk_draw_context_begin_frame_full (priv->context,
                                      gsk_render_node_get_preferred_depth (root),
                                      region);
 
+  /* 释放不再使用的 GPU 资源 */
   gsk_gpu_device_maybe_gc (priv->device);
 
+  /* 设定当前线程egl_context */
   gsk_gpu_renderer_make_current (self);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
@@ -447,7 +453,7 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
 
   renderer_class->realize = gsk_gpu_renderer_realize;
   renderer_class->unrealize = gsk_gpu_renderer_unrealize;
-  renderer_class->render = gsk_gpu_renderer_render;
+  renderer_class->render = gsk_gpu_renderer_render; /* 渲染的时候调用的函数 */
   renderer_class->render_texture = gsk_gpu_renderer_render_texture;
 
   gsk_ensure_resources ();

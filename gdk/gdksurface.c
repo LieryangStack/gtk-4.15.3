@@ -883,7 +883,11 @@ gdk_surface_new_toplevel (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->toplevel_type,
+  /**
+   * GdkDisplay 初始化的时候，会赋值toplevel_type
+   * 比如 GdkX11Display， display_class->toplevel_type = GDK_TYPE_X11_TOPLEVEL; 
+   */
+  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->toplevel_type, /*  */
                        "display", display,
                        NULL);
 }

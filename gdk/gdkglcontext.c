@@ -712,6 +712,12 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           rects[j++] = (int) ceil (rect.width * scale);
           rects[j++] = (int) ceil (rect.height * scale);
         }
+
+      /**
+       * eglSwapBuffersWithDamage 表示只渲染指定区域
+       * @rects: x,y,width,height(每四个元素表示一个矩形)
+       * @n_rects: 表示几个矩形渲染区域
+       */
       priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
       g_free (heap_rects);
     }

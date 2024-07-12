@@ -739,11 +739,11 @@ static struct {
 #ifdef GDK_RENDERING_VULKAN
   { get_renderer_for_vulkan },
 #endif
-  { get_renderer_for_gl },
-#ifdef GDK_RENDERING_VULKAN
+  { get_renderer_for_gl }, /* 一般都是选择的OpenGL渲染 */
+#ifdef GDK_RENDERING_VULKAN  
   { get_renderer_for_vulkan_fallback },
 #endif
-  { get_renderer_for_gl_fallback },
+  { get_renderer_for_gl_fallback }, /*  */
   { get_renderer_fallback },
 };
 
@@ -751,13 +751,10 @@ static struct {
  * gsk_renderer_new_for_surface:
  * @surface: a `GdkSurface`
  *
- * Creates an appropriate `GskRenderer` instance for the given @surface.
- *
- * If the `GSK_RENDERER` environment variable is set, GSK will
- * try that renderer first, before trying the backend-specific
- * default. The ultimate fallback is the cairo renderer.
- *
- * The renderer will be realized before it is returned.
+ * @brief: 根据给定的 @surface 创建一个合适的 GskRenderer 实例对象
+ *     
+ *         如果设置了 `GSK_RENDERER` 环境变量，GSK 将首先尝试该渲染器，
+ *         然后才尝试特定后端的默认渲染器。最终的后备是 cairo 渲染器。
  *
  * Returns: (transfer full) (nullable): a `GskRenderer`
  */

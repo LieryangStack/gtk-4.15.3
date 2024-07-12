@@ -272,8 +272,8 @@ typedef struct
   GtkGesture *click_gesture;
   GtkEventController *application_shortcut_controller;
 
-  GdkSurface  *surface;
-  GskRenderer *renderer;
+  GdkSurface  *surface; /* 该窗口对应的surface */
+  GskRenderer *renderer; /* 该窗口使用的渲染器 */
 
   GList *foci;
 
@@ -535,7 +535,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
 						gtk_window_native_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER, /* 快捷键接口 */
 						gtk_window_shortcut_manager_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,  /* 实现了GtkRoot接口 */
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,  /* GtkWindow是唯一一个实现GtkRoot接口的对象 */
 						gtk_window_root_interface_init))
 
 static GtkAccessibleInterface *parent_accessible_iface;
@@ -4342,14 +4342,13 @@ gtk_window_realize (GtkWidget *widget)
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
-
   
   if (priv->renderer == NULL)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "notify::mapped", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget); /* 连接到surface渲染信号 */
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
 
