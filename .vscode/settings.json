@@ -3,6 +3,7 @@
   "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
   "files.associations": {
     "paintable.h": "c",
-    "gdkdmabufprivate.h": "c"
+    "gdkdmabufprivate.h": "c",
+    "gdkx11glcontext.h": "c"
   }
 }

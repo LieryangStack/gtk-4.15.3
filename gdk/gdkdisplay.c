@@ -1376,6 +1376,7 @@ gdk_display_init_gl (GdkDisplay *self)
    * 创建了 GdkX11DragSurface  GdkX11GLContextEGL
    */
   context = GDK_DISPLAY_GET_CLASS (self)->init_gl (self, &priv->gl_error);
+  g_print ("%s = %p\n",G_OBJECT_TYPE_NAME(context), context);
   if (context == NULL)
     return;
 
@@ -1451,17 +1452,13 @@ gdk_display_prepare_gl (GdkDisplay  *self,
  * @self: a `GdkDisplay`
  * @error: return location for an error
  * 
- * 
+ * @brief: 为 GdkDisplay 创建一个新的 GdkGLContext
+ *         新创建的 GdkGLContext 与任何 surface 无关，不能用于绘制任何surface。
+ *         只能用于绘制到 非surface framebuffers（例如 texture）
  *
- * Creates a new `GdkGLContext` for the `GdkDisplay`.
- *
- * The context is disconnected from any particular surface or surface
- * and cannot be used to draw to any surface. It can only be used to
- * draw to non-surface framebuffers like textures.
- *
- * If the creation of the `GdkGLContext` failed, @error will be set.
- * Before using the returned `GdkGLContext`, you will need to
- * call [method@Gdk.GLContext.make_current] or [method@Gdk.GLContext.realize].
+ * @note: 如果 GdkGLContext 的创建失败，@error 将被设置。
+ *        在使用返回的 GdkGLContext 之前，你需要调用 
+ *        [method@Gdk.GLContext.make_current] 或 [method@Gdk.GLContext.realize]。
  *
  * Returns: (transfer full): the newly created `GdkGLContext`
  *

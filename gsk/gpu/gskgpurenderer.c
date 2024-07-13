@@ -37,7 +37,7 @@ typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;
 struct _GskGpuRendererPrivate
 {
   GskGpuDevice *device;
-  GdkDrawContext *context;
+  GdkDrawContext *context;  /* 通过surface的display（默认显示）的GdkGLContext创建一个共享GdkGLContext上下文 */
   GskGpuOptimizations optimizations;
 
   GskGpuFrame *frames[GSK_GPU_MAX_FRAMES];

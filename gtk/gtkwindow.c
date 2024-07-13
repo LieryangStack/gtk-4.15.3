@@ -4314,7 +4314,7 @@ gtk_window_realize (GtkWidget *widget)
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
 
-  /* Create default title bar */
+  /* 创建默认 title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     {
       if (gtk_window_is_composited (window))
@@ -4342,7 +4342,7 @@ gtk_window_realize (GtkWidget *widget)
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
-  
+  /* 创建 GskRenderer */
   if (priv->renderer == NULL)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 

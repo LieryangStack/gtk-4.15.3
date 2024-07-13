@@ -44,7 +44,7 @@
 typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {
-  GdkDisplay *display;
+  GdkDisplay *display; /* 一般没有给变量赋值 */
   GdkSurface *surface;
 
   cairo_region_t *frame_region;
