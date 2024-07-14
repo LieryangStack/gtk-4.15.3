@@ -57,6 +57,19 @@
  * `GtkSnapshot`, use [ctor@Gtk.Snapshot.new].
  */
 
+
+/**
+ * GtkSnapshot:
+ *
+ * `GtkSnapshot` 协助为小部件创建 [class@Gsk.RenderNode]。
+ *
+ * 它的功能类似于 cairo 上下文，并维护一个渲染节点及其相关转换的堆栈。
+ *
+ * 堆栈顶部的节点是 `gtk_snapshot_append_…()` 函数操作的对象。使用 `gtk_snapshot_push_…()` 函数和 [method@Snapshot.pop] 来更改当前节点。
+ *
+ * 获取 `GtkSnapshot` 对象的典型方法是作为 [vfunc@Gtk.Widget.snapshot] vfunc 的参数。如果需要自己创建 `GtkSnapshot`，请使用 [ctor@Gtk.Snapshot.new]。
+ */
+
 typedef struct _GtkSnapshotState GtkSnapshotState;
 
 typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
@@ -1969,8 +1982,14 @@ gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
  * gtk_snapshot_save:
  * @snapshot: a `GtkSnapshot`
  *
- * Makes a copy of the current state of @snapshot and saves it
- * on an internal stack.
+ * 复制 @snapshot 的当前状态，并将其保存在内部堆栈中。
+ * 
+ * 当调用 [method@Gtk.Snapshot.restore] 时，@snapshot 将恢复到保存的状态。
+ * 
+ * 多次调用 [method@Gtk.Snapshot.save] 和 [method@Gtk.Snapshot.restore] 可以嵌套；
+ * 每次调用 `gtk_snapshot_restore()` 会恢复与之匹配的 `gtk_snapshot_save()` 的状态。
+ * 
+ * 需要通过相应的 `gtk_snapshot_restore()` 调用清除所有保存的状态。
  *
  * When [method@Gtk.Snapshot.restore] is called, @snapshot will
  * be restored to the saved state.
@@ -1997,6 +2016,9 @@ gtk_snapshot_save (GtkSnapshot *snapshot)
  * gtk_snapshot_restore:
  * @snapshot: a `GtkSnapshot`
  *
+ * 将 @snapshot 恢复到之前调用 [method@Snapshot.save] 时保存的状态，
+ * 并从保存状态的堆栈中移除该状态。
+ * 
  * Restores @snapshot to the state saved by a preceding call to
  * [method@Snapshot.save] and removes that state from the stack of
  * saved states.
