@@ -48,7 +48,7 @@ struct _GdkSurface
   int x;
   int y;
 
-  GdkGLContext *gl_paint_context;
+  GdkGLContext *gl_paint_context; /* 创建了 GdkSurface ，然后再创建 GdkGLContext */
 
   cairo_region_t *update_area;
   guint update_freeze_count;

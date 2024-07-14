@@ -208,6 +208,7 @@ gdk_display_real_get_default_seat (GdkDisplay *display)
   return display->seats->data;
 }
 
+/* open信号的默认处理函数 */
 static void
 gdk_display_real_opened (GdkDisplay *display)
 {
@@ -228,7 +229,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->init_gl = gdk_display_default_init_gl;
   class->rate_egl_config = gdk_display_default_rate_egl_config;
   class->get_default_seat = gdk_display_real_get_default_seat;
-  class->opened = gdk_display_real_opened;
+  class->opened = gdk_display_real_opened;  /* open信号的默认处理函数 */
 
   /**
    * GdkDisplay:composited: (attributes org.gtk.Property.get=gdk_display_is_composited)

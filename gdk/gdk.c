@@ -333,7 +333,7 @@ gdk_display_open_default (void)
 
   g_return_val_if_fail (gdk_initialized, NULL);
 
-  display = gdk_display_get_default ();
+  display = gdk_display_get_default ();  /* 如果没有静态GdkDisplayManager对象，这里就创建 */
   if (display)
     return display;
 

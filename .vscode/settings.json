@@ -4,6 +4,8 @@
   "files.associations": {
     "paintable.h": "c",
     "gdkdmabufprivate.h": "c",
-    "gdkx11glcontext.h": "c"
+    "gdkx11glcontext.h": "c",
+    "gtkwindow.h": "c",
+    "gdksurface.h": "c"
   }
 }

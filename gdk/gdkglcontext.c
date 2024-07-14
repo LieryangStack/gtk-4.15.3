@@ -1850,7 +1850,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
         }
     }
 
-
+  /* 这里是实际调用 将context中的egl_context 设置为当前线程主上下文 */
   if (!GDK_GL_CONTEXT_GET_CLASS (context)->make_current (context, surfaceless))
     {
       g_warning ("gdk_gl_context_make_current() failed");

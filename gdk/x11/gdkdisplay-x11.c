@@ -1479,7 +1479,6 @@ gdk_x11_display_open (const char *display_name)
    * 如果GL是可用的，我们希望选择更好的默认/rgba视觉效果
    * 因为我们关心 GLX 细节，例如例如 alpha/depth/stencil 深度、立体和双缓冲。
    * 
-   * 注意： 这还会再创建初始的GL上下文上面设置主surface
    */
   if (!gdk_display_prepare_gl (display, NULL))
     {
