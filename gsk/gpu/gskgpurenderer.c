@@ -405,7 +405,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   /* 释放不再使用的 GPU 资源 */
   gsk_gpu_device_maybe_gc (priv->device);
 
-  /* 设定当前线程egl_context */
+  /* 设定当前线程egl_context（如果没有创建egl_context，会创建egl_context） */
   gsk_gpu_renderer_make_current (self);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);

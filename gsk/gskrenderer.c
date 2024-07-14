@@ -76,7 +76,7 @@ typedef struct
 {
   GObject parent_instance;
 
-  GdkSurface *surface;
+  GdkSurface *surface; /* 在那个surface上面进行渲染 */
   GskRenderNode *prev_node;
 
   GskProfiler *profiler;
@@ -768,32 +768,32 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++)
-    {
-      renderer_type = renderer_possibilities[i].get_renderer (surface);
-      if (renderer_type == G_TYPE_INVALID)
-        continue;
+  for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++) {
+  
+    renderer_type = renderer_possibilities[i].get_renderer (surface);
+    if (renderer_type == G_TYPE_INVALID)
+      continue;
 
-      renderer = g_object_new (renderer_type, NULL);
+    renderer = g_object_new (renderer_type, NULL);
 
-      if (gsk_renderer_realize (renderer, surface, &error))
-        {
-          GSK_DEBUG (RENDERER,
-                     "Using renderer '%s' for surface '%s'",
-                     G_OBJECT_TYPE_NAME (renderer),
-                     G_OBJECT_TYPE_NAME (surface));
-          return renderer;
-        }
+    if (gsk_renderer_realize (renderer, surface, &error))
+      {
+        GSK_DEBUG (RENDERER,
+                    "Using renderer '%s' for surface '%s'",
+                    G_OBJECT_TYPE_NAME (renderer),
+                    G_OBJECT_TYPE_NAME (surface));
+        return renderer;
+      }
 
-      GSK_DEBUG (RENDERER,
-                 "Failed to realize renderer '%s' for surface '%s': %s",
-                 G_OBJECT_TYPE_NAME (renderer),
-                 G_OBJECT_TYPE_NAME (surface),
-                 error->message);
+    GSK_DEBUG (RENDERER,
+                "Failed to realize renderer '%s' for surface '%s': %s",
+                G_OBJECT_TYPE_NAME (renderer),
+                G_OBJECT_TYPE_NAME (surface),
+                error->message);
 
-      g_object_unref (renderer);
-      g_clear_error (&error);
-    }
+    g_object_unref (renderer);
+    g_clear_error (&error);
+  }
 
   g_assert_not_reached ();
   return NULL;

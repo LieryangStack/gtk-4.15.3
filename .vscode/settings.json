@@ -6,6 +6,11 @@
     "gdkdmabufprivate.h": "c",
     "gdkx11glcontext.h": "c",
     "gtkwindow.h": "c",
-    "gdksurface.h": "c"
+    "gdksurface.h": "c",
+    "gdkdrop.h": "c",
+    "gdkdrawcontext.h": "c",
+    "gdkdrawcontextprivate.h": "c",
+    "gskrenderer.h": "c",
+    "gskgpurenderer.h": "c"
   }
 }
