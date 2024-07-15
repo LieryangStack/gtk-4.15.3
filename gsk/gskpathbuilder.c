@@ -74,6 +74,41 @@
  * Since: 4.14
  */
 
+
+/**
+ *  `GskPathBuilder` 是一个用于构建 `GskPath` 对象的辅助对象。
+ * 
+ *  GskPath对象构建如下：
+ *
+ * GskPath *
+ * construct_path (void)
+ * {
+ *   GskPathBuilder *builder;
+ *
+ *   builder = gsk_path_builder_new ();
+ *
+ *   // 添加 contour 到 builder
+ *
+ *   return gsk_path_builder_free_to_path (builder);
+ * }
+ * 
+ * 向 builder中添加contour有两种方法。
+ * 最简单的方法是使用 `gsk_path_builder_add_*` 向当前 builder 中添加函数已经定义的 contour
+ * 也可以从其他path添加，如 [method@Gsk.PathBuilder.add_path]。
+ * 
+ * `gsk_path_builder_add_*` 方法总是添加完整的contours，并且不会使用或修改当前点。
+ * 
+ * 另一种方法是使用 `gsk_path_builder_*_to` 函数组手动定义每条线和曲线。
+ * 你可以从调用 [method@Gsk.PathBuilder.move_to] 开始设置起点，
+ * 然后多次调用任何绘图函数，在平面上移动笔。
+ * 完成后，你可以调用 [method@Gsk.PathBuilder.close]，
+ * 通过一条线将路径连接回起点以闭合路径。
+ * 
+ * 这类似于 Cairo 中绘制路径的方式。
+ * 
+ * 请注意，`GskPathBuilder` 会尽可能减少添加的贝塞尔曲线的阶数，以简化渲染。
+ * 
+ */
 struct _GskPathBuilder
 {
   int ref_count;
