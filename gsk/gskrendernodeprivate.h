@@ -30,7 +30,7 @@ struct _GskRenderNode
 
   gatomicrefcount ref_count;
 
-  graphene_rect_t bounds;
+  graphene_rect_t bounds; /* 矩形的坐标点和大小 */
 
   guint preferred_depth : 2;
   guint offscreen_for_opacity : 1;

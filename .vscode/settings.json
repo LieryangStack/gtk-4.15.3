@@ -14,6 +14,7 @@
     "gskgpurenderer.h": "c",
     "gskrendernode.h": "c",
     "gtkglarea.h": "c",
-    "gdktexture.h": "c"
+    "gdktexture.h": "c",
+    "gtksnapshotprivate.h": "c"
   }
 }

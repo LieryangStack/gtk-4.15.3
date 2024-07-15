@@ -164,16 +164,13 @@ static void gtk_snapshot_state_clear (GtkSnapshotState *state);
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
-/* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
- * so that we don't need to typecast between them.
- * After all, the GdkSnapshot only exist so poor language bindings don't trip. Hardcore
- * C code can just blatantly ignore such layering violations with a typedef.
- */
+
+/* typedef GdkSnapshot GtkSnapshot; 这里的GdkSnapshot其实就是GtkSnapshot(因为没有导入gdksnapshotprivate.h) */
 struct _GdkSnapshot {
   GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
 
-  GtkSnapshotStates      state_stack;
-  GtkSnapshotNodes       nodes;
+  GtkSnapshotStates      state_stack; /* 其实就是GdkArray，元素是 GtkSnapshotState */
+  GtkSnapshotNodes       nodes; /* 其实就是GdkArray，元素是 GskRenderNode */
 };
 
 struct _GtkSnapshotClass {
@@ -252,16 +249,22 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
   return state;
 }
 
+
+/* 获取该数组的最后一个元素 */
 static GtkSnapshotState *
 gtk_snapshot_get_current_state (const GtkSnapshot *snapshot)
 {
+  /* 获取数组 state_stack 的长度 */
   gsize size = gtk_snapshot_states_get_size (&snapshot->state_stack);
 
   g_assert (size > 0);
 
+  /* 获取该数组的最后一个元素 */
   return gtk_snapshot_states_get (&snapshot->state_stack, size - 1);
 }
 
+
+/* 获取该数组的倒数第二个元素 */
 static GtkSnapshotState *
 gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
 {
@@ -2247,8 +2250,8 @@ gtk_snapshot_perspective (GtkSnapshot *snapshot,
  * @snapshot: a `GtkSnapshot`
  * @node: a `GskRenderNode`
  *
- * Appends @node to the current render node of @snapshot,
- * without changing the current node.
+ * @brief: 将@note渲染节点添加到@snapshot  (这并不会改变当前渲染节点@note)
+ *         如果 @snapshot 还没有当前节点，则 @node 将成为初始节点。
  *
  * If @snapshot does not have a current node yet, @node
  * will become the initial node.
