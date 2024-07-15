@@ -29,53 +29,6 @@
 #include "gskcontourprivate.h"
 
 /**
- * GskPathBuilder:
- *
- * `GskPathBuilder` is an auxiliary object for constructing
- * `GskPath` objects.
- *
- * A path is constructed like this:
- *
- * |[<!-- language="C" -->
- * GskPath *
- * construct_path (void)
- * {
- *   GskPathBuilder *builder;
- *
- *   builder = gsk_path_builder_new ();
- *
- *   // add contours to the path here
- *
- *   return gsk_path_builder_free_to_path (builder);
- * ]|
- *
- * Adding contours to the path can be done in two ways.
- * The easiest option is to use the `gsk_path_builder_add_*` group
- * of functions that add predefined contours to the current path,
- * either common shapes like [method@Gsk.PathBuilder.add_circle]
- * or by adding from other paths like [method@Gsk.PathBuilder.add_path].
- *
- * The `gsk_path_builder_add_*` methods always add complete contours,
- * and do not use or modify the current point.
- *
- * The other option is to define each line and curve manually with
- * the `gsk_path_builder_*_to` group of functions. You start with
- * a call to [method@Gsk.PathBuilder.move_to] to set the starting point
- * and then use multiple calls to any of the drawing functions to
- * move the pen along the plane. Once you are done, you can call
- * [method@Gsk.PathBuilder.close] to close the path by connecting it
- * back with a line to the starting point.
- *
- * This is similar to how paths are drawn in Cairo.
- *
- * Note that `GskPathBuilder` will reduce the degree of added Bézier
- * curves as much as possible, to simplify rendering.
- *
- * Since: 4.14
- */
-
-
-/**
  *  `GskPathBuilder` 是一个用于构建 `GskPath` 对象的辅助对象。
  * 
  *  GskPath对象构建如下：
@@ -107,6 +60,8 @@
  * 这类似于 Cairo 中绘制路径的方式。
  * 
  * 请注意，`GskPathBuilder` 会尽可能减少添加的贝塞尔曲线的阶数，以简化渲染。
+ * 
+ * Since: 4.14
  * 
  */
 struct _GskPathBuilder
@@ -528,14 +483,14 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
 /**
  * gsk_path_builder_add_circle:
  * @self: a `GskPathBuilder`
- * @center: the center of the circle
- * @radius: the radius of the circle
+ * @center: 圆的中心
+ * @radius: 圆的半径
  *
- * Adds a circle with the @center and @radius.
+ * 添加一个以 @center 为中心，@radius 为半径的圆。
  *
- * The path is going around the circle in clockwise direction.
+ * 路径将以顺时针方向绕圈。
  *
- * If @radius is zero, the contour will be a closed point.
+ * 如果 @radius 为零，则轮廓将是一个封闭的点。
  *
  * Since: 4.14
  */

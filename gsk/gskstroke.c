@@ -373,7 +373,10 @@ gsk_stroke_get_miter_limit (const GskStroke *self)
  *   the array of dashes
  * @n_dash: number of elements in @dash
  *
- * Sets the dash pattern to use by this stroke.
+ * 
+ * 设置stroke的 dash pattern
+ * 
+ * dash pattern 是由一个交替的非负值数组指定。
  *
  * A dash pattern is specified by an array of alternating non-negative
  * values. Each value provides the length of alternate "on" and "off"

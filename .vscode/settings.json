@@ -11,6 +11,9 @@
     "gdkdrawcontext.h": "c",
     "gdkdrawcontextprivate.h": "c",
     "gskrenderer.h": "c",
-    "gskgpurenderer.h": "c"
+    "gskgpurenderer.h": "c",
+    "gskrendernode.h": "c",
+    "gtkglarea.h": "c",
+    "gdktexture.h": "c"
   }
 }
