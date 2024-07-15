@@ -11977,7 +11977,7 @@ gtk_widget_render (GtkWidget            *widget,
   snapshot = gtk_snapshot_new ();
   gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-  gtk_widget_snapshot (widget, snapshot);
+  gtk_widget_snapshot (widget, snapshot); /* 如果有GtkPaintable会执行该函数，执行完成后再 gsk_renderer_render */
   root = gtk_snapshot_free_to_node (snapshot);
 
   if (GDK_PROFILER_IS_RUNNING)
