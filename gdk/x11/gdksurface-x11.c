@@ -4796,6 +4796,7 @@ gdk_x11_surface_create_window (GdkX11Surface        *self,
   xattributes->colormap = gdk_x11_display_get_window_colormap (display_x11);
   xattributes_mask |= CWColormap;
 
+  /* 这里创建的坐标(0,0),长宽为一个像素的透明背景窗口 */
   self->xid = XCreateWindow (GDK_DISPLAY_XDISPLAY (display),
                              display_x11->screen->xroot_window,
                              0, 0, 1, 1,
@@ -5373,7 +5374,16 @@ gdk_x11_drag_surface_constructed (GObject *object)
   XSetWindowAttributes xattributes;
   long xattributes_mask;
 
-  xattributes.save_under = True;
+  /**
+   * 当该窗口被其他窗口部分覆盖时，X服务器会保存被覆盖的部分。
+   * 这样，当覆盖窗口被移除时，X 服务器可以迅速恢复被覆盖部分，而不需要重新绘制。
+   * 这对于浮动的临时窗口（如菜单、工具提示等）特别有用。
+   */
+  xattributes.save_under = True; 
+  /**
+   * 窗口管理器将不会管理这个窗口。(窗口管理器负责窗口的装饰、移动、调整大小)
+   * 如果设置该属性，我们在桌面无法用鼠标调整窗口位置和大小。
+   */
   xattributes.override_redirect = True;
   xattributes_mask = CWSaveUnder | CWOverrideRedirect;
 
