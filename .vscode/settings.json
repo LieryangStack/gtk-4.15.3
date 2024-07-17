@@ -15,6 +15,7 @@
     "gskrendernode.h": "c",
     "gtkglarea.h": "c",
     "gdktexture.h": "c",
-    "gtksnapshotprivate.h": "c"
+    "gtksnapshotprivate.h": "c",
+    "gdkframeclock.h": "c"
   }
 }

@@ -1556,10 +1556,8 @@ request_motion_cb (void *data)
 /*
  * gdk_surface_thaw_updates:
  * @surface: a `GdkSurface`
- *
- * Thaws a surface frozen with gdk_surface_freeze_updates(). Note that this
- * will not necessarily schedule updates if the surface freeze count reaches
- * zero.
+ * @brief: thaw解除前面使用gdk_surface_freeze_updates()冻结的surface，
+ * @note: 即使表面冻结计数达到零，这也不一定会调度更新。
  */
 void
 gdk_surface_thaw_updates (GdkSurface *surface)

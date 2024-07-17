@@ -11970,6 +11970,9 @@ gtk_widget_render (GtkWidget            *widget,
   if (!GTK_IS_NATIVE (widget))
     return;
 
+  /**
+   * 实现GtkNative接口的Widget才有GskRenderer（也就说才能调用渲染函数）
+   */
   renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   if (renderer == NULL)
     return;

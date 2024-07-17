@@ -89,6 +89,10 @@ struct _GdkSurface
 
   GList *devices_inside;
 
+  /**
+   * 类型是GdkFrameClockIdle，空闲刷新帧时钟对象
+   * 继承GdkSurface的GdkTopLevel和GdkDragSurface的constructed函数会创建该对象
+   */
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
   GSList *draw_contexts;

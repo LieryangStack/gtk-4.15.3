@@ -254,6 +254,8 @@ gtk_native_get_renderer (GtkNative *self)
  *
  * This is the translation from @self's surface coordinates into
  * @self's widget coordinates.
+ * 
+ * 转化@self的surface坐标到@self的widget坐标
  */
 void
 gtk_native_get_surface_transform (GtkNative *self,

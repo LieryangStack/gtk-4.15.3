@@ -1802,15 +1802,15 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot,
   for (state = gtk_snapshot_get_current_state (snapshot);
        gtk_snapshot_state_should_autopop (state) ||
        state->collect_func == NULL;
-       state = gtk_snapshot_get_current_state (snapshot))
-    {
-      if (state->collect_func == NULL)
-        forgotten_restores++;
+       state = gtk_snapshot_get_current_state (snapshot)) {
+    
+    if (state->collect_func == NULL)
+      forgotten_restores++;
 
-      node = gtk_snapshot_pop_one (snapshot);
-      if (node)
-        gtk_snapshot_append_node_internal (snapshot, node);
-    }
+    node = gtk_snapshot_pop_one (snapshot);
+    if (node)
+      gtk_snapshot_append_node_internal (snapshot, node);
+  }
 
   if (forgotten_restores)
     {
@@ -1860,16 +1860,11 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
  * gtk_snapshot_to_node:
  * @snapshot: a `GtkSnapshot`
  *
- * Returns the render node that was constructed
- * by @snapshot.
- *
- * Note that this function may return %NULL if nothing has been
- * added to the snapshot or if its content does not produce pixels
- * to be rendered.
- *
- * After calling this function, it is no longer possible to
- * add more nodes to @snapshot. The only function that should
- * be called after this is [method@GObject.Object.unref].
+ * @brief: 返回由 @snapshot构建的render node
+ * 
+ * @note: 如果我们没有添加任何东西到@snapshot中，或者其@snapshot内容不产生要渲染的像素，则此函数可能返回 %NULL。
+ *        
+ *        调用此函数后，不能再向 @snapshot 添加更多节点。此后唯一应调用的函数是 [method@GObject.Object.unref]。
  *
  * Returns: (transfer full) (nullable): the constructed `GskRenderNode` or
  *   %NULL if there are no nodes to render.
@@ -1881,12 +1876,11 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 
   result = gtk_snapshot_pop_internal (snapshot, FALSE);
 
-  /* We should have exactly our initial state */
-  if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
-    {
-      g_warning ("Too many gtk_snapshot_push() calls. %zu states remaining.",
-                 gtk_snapshot_states_get_size (&snapshot->state_stack));
-    }
+  /* 我们应该得到我们的初始状态 */
+  if (!gtk_snapshot_states_is_empty (&snapshot->state_stack)) {
+    g_warning ("Too many gtk_snapshot_push() calls. %zu states remaining.",
+                gtk_snapshot_states_get_size (&snapshot->state_stack));
+  }
 
   gtk_snapshot_states_clear (&snapshot->state_stack);
   gtk_snapshot_nodes_clear (&snapshot->nodes);

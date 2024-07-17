@@ -739,12 +739,12 @@ static struct {
 #ifdef GDK_RENDERING_VULKAN
   { get_renderer_for_vulkan },
 #endif
-  { get_renderer_for_gl }, /* 一般都是选择的OpenGL渲染 */
+  { get_renderer_for_gl }, /* 一般都是选择的GPU OpenGL渲染（GskNglRenderer） */
 #ifdef GDK_RENDERING_VULKAN  
   { get_renderer_for_vulkan_fallback },
 #endif
-  { get_renderer_for_gl_fallback }, /*  */
-  { get_renderer_fallback },
+  { get_renderer_for_gl_fallback }, /* 如果不支持GPU OpenGL渲染，才会选择普通OpenGL渲染（GskGLRenderer） */
+  { get_renderer_fallback }, /* 最后选择Cairo渲染（GskCairoRenderer） */
 };
 
 /**
