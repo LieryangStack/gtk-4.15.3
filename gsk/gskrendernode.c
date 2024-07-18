@@ -182,6 +182,10 @@ gsk_render_node_init (GskRenderNode *self)
   g_atomic_ref_count_init (&self->ref_count);
 }
 
+
+/**
+ * @brief: 注册 GskRenderNode类型 GSK_TYPE_RENDER_NODE
+ */
 GType
 gsk_render_node_get_type (void)
 {
@@ -242,9 +246,8 @@ gsk_render_node_get_type (void)
  * @node_name: the name of the node
  * @node_info: type information of the node
  *
- * Registers a new `GskRenderNode` type for the given @node_name using
- * the type information in @node_info.
- *
+ * 根据@node_name，注册名称为@node_name，基类是GSK_TYPE_RENDER_NODE的@node_name渲染类型对象
+ * 
  * Returns: the newly registered GType
  */
 GType
@@ -270,8 +273,8 @@ gsk_render_node_type_register_static (const char     *node_name,
 /*< private >
  * gsk_render_node_alloc:
  * @node_type: the `GskRenderNode`Type to instantiate
- *
- * Instantiates a new `GskRenderNode` for the given @node_type.
+ * 
+ * 通过@node_type创建相应的渲染节点类型对象
  *
  * Returns: (transfer full) (type GskRenderNode): the newly created `GskRenderNode`
  */

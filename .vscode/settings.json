@@ -16,6 +16,7 @@
     "gtkglarea.h": "c",
     "gdktexture.h": "c",
     "gtksnapshotprivate.h": "c",
-    "gdkframeclock.h": "c"
+    "gdkframeclock.h": "c",
+    "gtksnapshot.h": "c"
   }
 }

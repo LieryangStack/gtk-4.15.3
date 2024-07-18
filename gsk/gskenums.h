@@ -94,37 +94,37 @@
  */
 
 typedef enum {
-  GSK_NOT_A_RENDER_NODE = 0,
-  GSK_CONTAINER_NODE,
-  GSK_CAIRO_NODE,
-  GSK_COLOR_NODE,
-  GSK_LINEAR_GRADIENT_NODE,
-  GSK_REPEATING_LINEAR_GRADIENT_NODE,
-  GSK_RADIAL_GRADIENT_NODE,
-  GSK_REPEATING_RADIAL_GRADIENT_NODE,
-  GSK_CONIC_GRADIENT_NODE,
-  GSK_BORDER_NODE,
-  GSK_TEXTURE_NODE,
-  GSK_INSET_SHADOW_NODE,
-  GSK_OUTSET_SHADOW_NODE,
-  GSK_TRANSFORM_NODE,
-  GSK_OPACITY_NODE,
-  GSK_COLOR_MATRIX_NODE,
-  GSK_REPEAT_NODE,
-  GSK_CLIP_NODE,
-  GSK_ROUNDED_CLIP_NODE,
-  GSK_SHADOW_NODE,
-  GSK_BLEND_NODE,
-  GSK_CROSS_FADE_NODE,
-  GSK_TEXT_NODE,
-  GSK_BLUR_NODE,
-  GSK_DEBUG_NODE,
-  GSK_GL_SHADER_NODE,
-  GSK_TEXTURE_SCALE_NODE,
-  GSK_MASK_NODE,
-  GSK_FILL_NODE,
-  GSK_STROKE_NODE,
-  GSK_SUBSURFACE_NODE,
+  GSK_NOT_A_RENDER_NODE = 0, /* 错误类型，没有任何节点会有这个类型。 */
+  GSK_CONTAINER_NODE, /* 节点容器，用于组织和管理多个子节点。 */
+  GSK_CAIRO_NODE, /* 绘制cairo_surface_t的节点，适用于基于Cairo的绘图操作。 */
+  GSK_COLOR_NODE, /* 绘制单色矩形的节点，通常用于背景或填充区域。 */
+  GSK_LINEAR_GRADIENT_NODE, /* 绘制线性渐变的节点。 */
+  GSK_REPEATING_LINEAR_GRADIENT_NODE, /* 绘制重复线性渐变的节点。 */
+  GSK_RADIAL_GRADIENT_NODE, /* 绘制径向渐变的节点。 */
+  GSK_REPEATING_RADIAL_GRADIENT_NODE, /* 绘制重复径向渐变的节点。 */
+  GSK_CONIC_GRADIENT_NODE, /* 绘制锥形渐变的节点。 */
+  GSK_BORDER_NODE, /* 在区域周围绘制边框的节点。 */
+  GSK_TEXTURE_NODE, /* 绘制GdkTexture的节点，适用于纹理映射。 */
+  GSK_INSET_SHADOW_NODE, /* 绘制内嵌阴影的节点。 */
+  GSK_OUTSET_SHADOW_NODE, /* 绘制外部阴影的节点。 */
+  GSK_TRANSFORM_NODE, /* 应用矩阵变换后渲染其子节点的节点。 */
+  GSK_OPACITY_NODE, /* 更改其子节点的不透明度的节点。 */
+  GSK_COLOR_MATRIX_NODE, /* 对每个像素应用颜色矩阵的节点。 */
+  GSK_REPEAT_NODE, /* 重复子节点内容的节点。 */
+  GSK_CLIP_NODE, /* 将其子节点裁剪到矩形区域的节点。 */
+  GSK_ROUNDED_CLIP_NODE, /* 将其子节点裁剪到圆角矩形的节点。 */
+  GSK_SHADOW_NODE, /* 在其子节点下面绘制阴影的节点。 */
+  GSK_BLEND_NODE, /* 混合两个子节点的节点。 */
+  GSK_CROSS_FADE_NODE, /* 在两个子节点之间交叉淡入淡出的节点。 */
+  GSK_TEXT_NODE, /* 包含字形字符串的节点，用于文本渲染。 */
+  GSK_BLUR_NODE, /* 应用模糊效果的节点。 */
+  GSK_DEBUG_NODE, /* 包含不影响渲染的调试信息的节点。 */
+  GSK_GL_SHADER_NODE, /* 使用OpenGL片段着色器进行渲染的节点。 */
+  GSK_TEXTURE_SCALE_NODE, /* 绘制经过缩放和过滤的GdkTexture的节点。 */
+  GSK_MASK_NODE, /* 使用一个子节点遮罩另一个子节点的节点。 */
+  GSK_FILL_NODE, /* 填充路径的节点。 */
+  GSK_STROKE_NODE, /* 描绘路径轮廓的节点。 */
+  GSK_SUBSURFACE_NODE, /* 可能将部分场景图重定向到子表面的节点。 */
 } GskRenderNodeType;
 
 /**
