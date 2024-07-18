@@ -87,8 +87,8 @@ struct _GtkImage
 {
   GtkWidget parent_instance;
 
-  GtkIconHelper *icon_helper;
-  GtkIconSize icon_size;
+  GtkIconHelper *icon_helper; /* 图标存储在该对象里面 */
+  GtkIconSize icon_size; /* 图标大小 */
 
   float baseline_align;
 
@@ -1214,11 +1214,9 @@ gtk_image_system_setting_changed (GtkWidget        *widget,
  * gtk_image_set_pixel_size: (attributes org.gtk.Method.set_property=pixel-size)
  * @image: a `GtkImage`
  * @pixel_size: the new pixel size
- *
- * Sets the pixel size to use for named icons.
- *
- * If the pixel size is set to a value != -1, it is used instead
- * of the icon size set by [method@Gtk.Image.set_from_icon_name].
+ * @brief: 如果像素大小设置为一个不等于 -1 的值，那么它会被使用，
+ *         而不是由 [method@Gtk.Image.set_from_icon_name] 设置的图标大小。
+ * 
  */
 void
 gtk_image_set_pixel_size (GtkImage *image,

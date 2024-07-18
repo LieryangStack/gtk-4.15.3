@@ -12007,6 +12007,7 @@ gtk_widget_render (GtkWidget            *widget,
   }
 }
 
+
 static void
 gtk_widget_child_observer_destroyed (gpointer widget)
 {
@@ -12014,6 +12015,7 @@ gtk_widget_child_observer_destroyed (gpointer widget)
 
   priv->children_observer = NULL;
 }
+
 
 /**
  * gtk_widget_observe_children:

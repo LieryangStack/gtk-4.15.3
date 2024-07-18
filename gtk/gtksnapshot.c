@@ -79,12 +79,13 @@ typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
 typedef void            (* GtkSnapshotClearFunc)   (GtkSnapshotState *state);
 
 struct _GtkSnapshotState {
-  guint                  start_node_index;
+  guint                  start_node_index; /* 将GtkSnapshotState设为当前状态的时候，渲染节点数组的size，表示该位置开始，是新加的渲染节点 */
   guint                  n_nodes; /* 初始都为0，如果该状态为当前状态的时候，添加渲染节点，该变量相应增加  */
 
   GskTransform *         transform; /* 变换矩阵对象 */
 
-  GtkSnapshotCollectFunc collect_func;   /* 主要作用就是将一组渲染节点合并成一个单一的渲染节点，以便后续的渲染处理 */
+  /* 收集函数有很多种，主要是针对渲染节点进行处理，有默认合并渲染节点函数、修建渲染节点函数（这跟渲染节点的子类类型有关，每一个子类都有相应的收集函数） */
+  GtkSnapshotCollectFunc collect_func;
   GtkSnapshotClearFunc   clear_func;
   union {
     struct {
@@ -204,6 +205,9 @@ gtk_snapshot_class_init (GtkSnapshotClass *klass)
   gobject_class->dispose = gtk_snapshot_dispose;
 }
 
+/**
+ * @brief: GtkSnapshot默认收集渲染节点函数
+ */
 static GskRenderNode *
 gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
                               GtkSnapshotState  *state,
