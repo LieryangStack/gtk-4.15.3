@@ -11980,30 +11980,31 @@ gtk_widget_render (GtkWidget            *widget,
   snapshot = gtk_snapshot_new ();
   gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+  /* 如果有 */
   gtk_widget_snapshot (widget, snapshot); /* 如果有GtkPaintable会执行该函数，执行完成后再 gsk_renderer_render */
+  /* 从快照对象中pop出所有的渲染节点，准备进行渲染 */
   root = gtk_snapshot_free_to_node (snapshot);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    {
-      before_render = GDK_PROFILER_CURRENT_TIME;
-      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
-    }
+  if (GDK_PROFILER_IS_RUNNING) {
+    before_render = GDK_PROFILER_CURRENT_TIME;
+    gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
+  }
 
-  if (root != NULL)
-    {
-      root = gtk_inspector_prepare_render (widget,
-                                           renderer,
-                                           surface,
-                                           region,
-                                           root,
-                                           priv->render_node);
+  if (root != NULL) {
+  
+    root = gtk_inspector_prepare_render (widget,
+                                          renderer,
+                                          surface,
+                                          region,
+                                          root,
+                                          priv->render_node);
 
-      gsk_renderer_render (renderer, root, region);
+    gsk_renderer_render (renderer, root, region);
 
-      gsk_render_node_unref (root);
+    gsk_render_node_unref (root);
 
-      gdk_profiler_end_mark (before_render, "Widget render", "");
-    }
+    gdk_profiler_end_mark (before_render, "Widget render", "");
+  }
 }
 
 static void

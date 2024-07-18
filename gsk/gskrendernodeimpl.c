@@ -3304,7 +3304,7 @@ gsk_container_node_class_init (gpointer g_class,
  * @children: (array length=n_children) (transfer none): The children of the node
  * @n_children: Number of children in the @children array
  *
- * Creates a new `GskRenderNode` instance for holding the given @children.
+ *  创建一个新的 GskRenderNode 对象（节点容器），它会保存所有 子节点（存储n_children个节点）
  *
  * The new node will acquire a reference to each of the children.
  *
@@ -3323,33 +3323,30 @@ gsk_container_node_new (GskRenderNode **children,
   self->disjoint = TRUE;
   self->n_children = n_children;
 
-  if (n_children == 0)
-    {
-      gsk_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
-    }
-  else
-    {
-      graphene_rect_t bounds;
+  if (n_children == 0) {
+    gsk_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
+  } else {
+    graphene_rect_t bounds;
 
-      self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
+    self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
-      self->children[0] = gsk_render_node_ref (children[0]);
-      node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
-      node->preferred_depth = children[0]->preferred_depth;
-      gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
+    self->children[0] = gsk_render_node_ref (children[0]);
+    node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
+    node->preferred_depth = children[0]->preferred_depth;
+    gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
 
-      for (guint i = 1; i < n_children; i++)
-        {
-          self->children[i] = gsk_render_node_ref (children[i]);
-          self->disjoint = self->disjoint && !gsk_rect_intersects (&bounds, &(children[i]->bounds));
-          graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
-          node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
-          node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
-        }
+    for (guint i = 1; i < n_children; i++)
+      {
+        self->children[i] = gsk_render_node_ref (children[i]);
+        self->disjoint = self->disjoint && !gsk_rect_intersects (&bounds, &(children[i]->bounds));
+        graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
+        node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
+        node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
+      }
 
-      gsk_rect_init_from_rect (&node->bounds, &bounds);
-      node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
-    }
+    gsk_rect_init_from_rect (&node->bounds, &bounds);
+    node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
+  }
 
   return node;
 }

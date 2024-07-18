@@ -80,11 +80,11 @@ typedef void            (* GtkSnapshotClearFunc)   (GtkSnapshotState *state);
 
 struct _GtkSnapshotState {
   guint                  start_node_index;
-  guint                  n_nodes;
+  guint                  n_nodes; /* 初始都为0，如果该状态为当前状态的时候，添加渲染节点，该变量相应增加  */
 
-  GskTransform *         transform;
+  GskTransform *         transform; /* 变换矩阵对象 */
 
-  GtkSnapshotCollectFunc collect_func;
+  GtkSnapshotCollectFunc collect_func;   /* 主要作用就是将一组渲染节点合并成一个单一的渲染节点，以便后续的渲染处理 */
   GtkSnapshotClearFunc   clear_func;
   union {
     struct {
@@ -208,49 +208,63 @@ static GskRenderNode *
 gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
                               GtkSnapshotState  *state,
                               GskRenderNode    **nodes,
-                              guint              n_nodes)
-{
+                              guint              n_nodes) {
+
   GskRenderNode *node;
 
-  if (n_nodes == 0)
-    {
-      node = NULL;
-    }
-  else if (n_nodes == 1)
-    {
-      node = gsk_render_node_ref (nodes[0]);
-    }
-  else
-    {
-      node = gsk_container_node_new (nodes, n_nodes);
-    }
+  if (n_nodes == 0) {
+    node = NULL;
+  } else if (n_nodes == 1) { /* 如果就一个渲染节点，也就返回这一个渲染节点 */
+    node = gsk_render_node_ref (nodes[0]);
+  } else {
+    node = gsk_container_node_new (nodes, n_nodes); /* 如果有多个渲染节点，将这多个渲染节点存储到渲染节点容器对象中，再返回 */
+  }
 
   return node;
 }
 
+/**
+ * @param snapshot: 快照对象
+ * @param transform: 转换对象
+ * @param collect_func: 渲染节点合并函数
+ * @brief: 是用来在 GtkSnapshot 对象中保存当前的绘图状态，它的作用是将当前的绘图状态压入堆栈，以便稍后可以恢复。
+ * 
+ *         会在snapshot的state_stack数组里面新加一个当前的绘图状态
+ */
 static GtkSnapshotState *
 gtk_snapshot_push_state (GtkSnapshot            *snapshot,
                          GskTransform           *transform,
                          GtkSnapshotCollectFunc  collect_func,
-                         GtkSnapshotClearFunc    clear_func)
-{
+                         GtkSnapshotClearFunc    clear_func) {
+  
+  /* 查看 state_stack 数组里面有多少个 GtkSnapshotState 对象 */
   const gsize n_states = gtk_snapshot_states_get_size (&snapshot->state_stack);
   GtkSnapshotState *state;
 
+  /* state_stack 数组长度加一 */
   gtk_snapshot_states_set_size (&snapshot->state_stack, n_states + 1);
+  /* 得到新加的 GtkSnapshotState */
   state = gtk_snapshot_states_get (&snapshot->state_stack, n_states);
 
   state->transform = gsk_transform_ref (transform);
   state->collect_func = collect_func;
   state->clear_func = clear_func;
+  /* 保存了渲染节点的数量 */
   state->start_node_index = gtk_snapshot_nodes_get_size (&snapshot->nodes);
   state->n_nodes = 0;
+
+  /* 入栈时刻，有多少状态栈元素、有多少渲染节点 */
+  gsize state_stack_size = gtk_snapshot_states_get_size (&snapshot->state_stack);
+  gsize nodes_size = gtk_snapshot_nodes_get_size (&snapshot->nodes);
 
   return state;
 }
 
 
 /* 获取该数组的最后一个元素 */
+/**
+ * 
+ */
 static GtkSnapshotState *
 gtk_snapshot_get_current_state (const GtkSnapshot *snapshot)
 {
@@ -265,6 +279,9 @@ gtk_snapshot_get_current_state (const GtkSnapshot *snapshot)
 
 
 /* 获取该数组的倒数第二个元素 */
+/**
+ * 
+ */
 static GtkSnapshotState *
 gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
 {
@@ -276,6 +293,9 @@ gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
 }
 
 /* n == 0 => current, n == 1, previous, etc */
+/**
+ * 
+ */
 static GtkSnapshotState *
 gtk_snapshot_get_nth_previous_state (const GtkSnapshot *snapshot,
                                      int n)
@@ -325,8 +345,7 @@ gtk_snapshot_new (void)
  * gtk_snapshot_free_to_node: (skip)
  * @snapshot: (transfer full): a `GtkSnapshot`
  *
- * Returns the node that was constructed by @snapshot
- * and frees @snapshot.
+ * 通过 @snapshot建造渲染节点，然后解引用@snapshot
  *
  * See also [method@Gtk.Snapshot.to_node].
  *
@@ -1732,46 +1751,63 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
   guint state_index;
   GskRenderNode *node;
 
-  if (gtk_snapshot_states_is_empty (&snapshot->state_stack))
-    {
-      g_warning ("Too many gtk_snapshot_pop() calls.");
-      return NULL;
-    }
+  gsize state_stack_size = gtk_snapshot_states_get_size (&snapshot->state_stack);
+  gsize nodes_size = gtk_snapshot_nodes_get_size (&snapshot->nodes);
+
+  /* 如果没有 @snapshot 的状态堆栈没有元素，将直接返回  */
+  if (gtk_snapshot_states_is_empty (&snapshot->state_stack)) {
+    g_warning ("Too many gtk_snapshot_pop() calls.");
+    return NULL;
+  }
 
   state = gtk_snapshot_get_current_state (snapshot);
+  /* 获取到数组中的最后一个元素索引  */
   state_index = gtk_snapshot_states_get_size (&snapshot->state_stack) - 1;
 
-  if (state->collect_func)
-    {
-      node = state->collect_func (snapshot,
-                                  state,
-                                  (GskRenderNode **) gtk_snapshot_nodes_index (&snapshot->nodes, state->start_node_index),
-                                  state->n_nodes);
+  /**
+   * 一般来说，收集函数会把所有渲染节点合并成一个渲染节点
+   */
+  if (state->collect_func) {
+    
+    node = state->collect_func (snapshot,
+                                state,
+                                (GskRenderNode **) gtk_snapshot_nodes_index (&snapshot->nodes, state->start_node_index),
+                                state->n_nodes);
 
-      /* The collect func may not modify the state stack... */
-      g_assert (state_index == gtk_snapshot_states_get_size (&snapshot->state_stack) - 1);
+    /* 收集函数可能会修改状态栈 state stack */
+    g_assert (state_index == gtk_snapshot_states_get_size (&snapshot->state_stack) - 1);
 
-      /* Remove all the state's nodes from the list of nodes */
-      g_assert (state->start_node_index + state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
-      gtk_snapshot_nodes_splice (&snapshot->nodes, state->start_node_index, state->n_nodes, FALSE, NULL, 0);
-    }
-  else
-    {
-      GtkSnapshotState *previous_state;
+    /* 也就是说，把save状态后，所有新添加的渲染节点删除 */
+    g_assert (state->start_node_index + state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
+    gtk_snapshot_nodes_splice (&snapshot->nodes, state->start_node_index, state->n_nodes, FALSE, NULL, 0);
+  
+  } else {
+    
+    GtkSnapshotState *previous_state;
 
-      node = NULL;
+    node = NULL;
 
-      /* move the nodes to the parent */
-      previous_state = gtk_snapshot_get_previous_state (snapshot);
-      previous_state->n_nodes += state->n_nodes;
-      g_assert (previous_state->start_node_index + previous_state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
-    }
+    /* move the nodes to the parent */
+    previous_state = gtk_snapshot_get_previous_state (snapshot);
+    previous_state->n_nodes += state->n_nodes;
+    g_assert (previous_state->start_node_index + previous_state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
+  }
 
+  /* 移除状态栈的最后一个元素 */
   gtk_snapshot_states_splice (&snapshot->state_stack, state_index, 1, FALSE, NULL, 0);
+
+  state_stack_size = gtk_snapshot_states_get_size (&snapshot->state_stack);
+  nodes_size = gtk_snapshot_nodes_get_size (&snapshot->nodes);
+
 
   return node;
 }
 
+
+/**
+ * @brief： 当前 GtkSnapshotState 添加渲染节点 @node
+ *          当前 GtkSnapshotState->n_nodes 渲染节点数量会增加一
+ */
 static void
 gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
                                    GskRenderNode *node)
@@ -1780,21 +1816,19 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 
   current_state = gtk_snapshot_get_current_state (snapshot);
 
-  if (current_state)
-    {
-      gtk_snapshot_nodes_append (&snapshot->nodes, node);
-      current_state->n_nodes ++;
-    }
-  else
-    {
-      g_critical ("Tried appending a node to an already finished snapshot.");
-    }
+  if (current_state) {
+    gtk_snapshot_nodes_append (&snapshot->nodes, node);
+    current_state->n_nodes ++;
+  } else {
+    g_critical ("Tried appending a node to an already finished snapshot.");
+  }
 }
+
 
 static GskRenderNode *
 gtk_snapshot_pop_internal (GtkSnapshot *snapshot,
-                           gboolean     is_texture_pop)
-{
+                           gboolean     is_texture_pop) {
+
   GtkSnapshotState *state;
   GskRenderNode *node;
   guint forgotten_restores = 0;
@@ -1813,20 +1847,20 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot,
   }
 
   if (forgotten_restores)
-    {
-      g_warning ("Too many gtk_snapshot_save() calls. %u saves remaining.", forgotten_restores);
-    }
+  {
+    g_warning ("Too many gtk_snapshot_save() calls. %u saves remaining.", forgotten_restores);
+  }
 
   if (is_texture_pop && (state->collect_func != gtk_snapshot_collect_gl_shader_texture))
-    {
-      g_critical ("Unexpected call to gtk_snapshot_gl_shader_pop_texture().");
-      return NULL;
-    }
+  {
+    g_critical ("Unexpected call to gtk_snapshot_gl_shader_pop_texture().");
+    return NULL;
+  }
   else if (!is_texture_pop && (state->collect_func == gtk_snapshot_collect_gl_shader_texture))
-    {
-      g_critical ("Expected a call to gtk_snapshot_gl_shader_pop_texture().");
-      return NULL;
-    }
+  {
+    g_critical ("Expected a call to gtk_snapshot_gl_shader_pop_texture().");
+    return NULL;
+  }
 
   return gtk_snapshot_pop_one (snapshot);
 }
@@ -1987,16 +2021,6 @@ gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
  * 每次调用 `gtk_snapshot_restore()` 会恢复与之匹配的 `gtk_snapshot_save()` 的状态。
  * 
  * 需要通过相应的 `gtk_snapshot_restore()` 调用清除所有保存的状态。
- *
- * When [method@Gtk.Snapshot.restore] is called, @snapshot will
- * be restored to the saved state.
- *
- * Multiple calls to [method@Gtk.Snapshot.save] and [method@Gtk.Snapshot.restore]
- * can be nested; each call to `gtk_snapshot_restore()` restores the state from
- * the matching paired `gtk_snapshot_save()`.
- *
- * It is necessary to clear all saved states with corresponding
- * calls to `gtk_snapshot_restore()`.
  */
 void
 gtk_snapshot_save (GtkSnapshot *snapshot)
@@ -2015,10 +2039,6 @@ gtk_snapshot_save (GtkSnapshot *snapshot)
  *
  * 将 @snapshot 恢复到之前调用 [method@Snapshot.save] 时保存的状态，
  * 并从保存状态的堆栈中移除该状态。
- * 
- * Restores @snapshot to the state saved by a preceding call to
- * [method@Snapshot.save] and removes that state from the stack of
- * saved states.
  */
 void
 gtk_snapshot_restore (GtkSnapshot *snapshot)
@@ -2026,20 +2046,24 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
   GtkSnapshotState *state;
   GskRenderNode *node;
 
+  /**
+   * 如果压入的 gtk_snapshot_collect_autopush_transform 收集函数
+   * 需要释放压入时刻的 状态栈，并把渲染节点添加到状态栈的上一个元素中
+   */
   for (state = gtk_snapshot_get_current_state (snapshot);
        gtk_snapshot_state_should_autopop (state);
-       state = gtk_snapshot_get_current_state (snapshot))
-    {
-      node = gtk_snapshot_pop_one (snapshot);
-      if (node)
-        gtk_snapshot_append_node_internal (snapshot, node);
-    }
+       state = gtk_snapshot_get_current_state (snapshot)) {
+    
+    node = gtk_snapshot_pop_one (snapshot);
+    if (node)
+      gtk_snapshot_append_node_internal (snapshot, node);
+  }
 
-  if (state->collect_func != NULL)
-    {
-      g_warning ("Too many gtk_snapshot_restore() calls.");
-      return;
-    }
+  if (state->collect_func != NULL) {
+
+    g_warning ("Too many gtk_snapshot_restore() calls.");
+    return;
+  }
 
   node = gtk_snapshot_pop_one (snapshot);
   g_assert (node == NULL);
