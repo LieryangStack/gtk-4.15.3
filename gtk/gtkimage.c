@@ -92,8 +92,8 @@ struct _GtkImage
 
   float baseline_align;
 
-  char *filename;
-  char *resource_path;
+  char *filename; /* 文件名称 */
+  char *resource_path; /* 资源路径 */
 };
 
 struct _GtkImageClass
@@ -1216,11 +1216,12 @@ gtk_image_system_setting_changed (GtkWidget        *widget,
  * @pixel_size: the new pixel size
  * @brief: 如果像素大小设置为一个不等于 -1 的值，那么它会被使用，
  *         而不是由 [method@Gtk.Image.set_from_icon_name] 设置的图标大小。
+ * @note: 设定的是 MIN {width, height} 设定为 @pixel_size
  * 
  */
 void
 gtk_image_set_pixel_size (GtkImage *image,
-			  int       pixel_size)
+			                    int       pixel_size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
 

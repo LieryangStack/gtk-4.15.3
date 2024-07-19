@@ -97,12 +97,12 @@ struct _GtkPicture
 {
   GtkWidget parent_instance;
 
-  GdkPaintable *paintable;
+  GdkPaintable *paintable; /* 存储显示内容 */
   GFile *file;
 
-  char *alternative_text;
-  guint can_shrink : 1;
-  GtkContentFit content_fit;
+  char *alternative_text; /* 文件描述显示的内容 */
+  guint can_shrink : 1; /* 图片能否缩小 */
+  GtkContentFit content_fit; /* 如何在控件中显示内容（图片），比如：保持长宽比、填充满等方式 */
 };
 
 struct _GtkPictureClass
@@ -932,9 +932,7 @@ gtk_picture_get_keep_aspect_ratio (GtkPicture *self)
  * @self: a `GtkPicture`
  * @can_shrink: if @self can be made smaller than its contents
  *
- * If set to %TRUE, the @self can be made smaller than its contents.
- *
- * The contents will then be scaled down when rendering.
+ * 如果设置成 TRUE, @self能够缩小到比正常尺寸小，这个图片可以在渲染的时候缩小
  *
  * If you want to still force a minimum size manually, consider using
  * [method@Gtk.Widget.set_size_request].
@@ -979,8 +977,7 @@ gtk_picture_get_can_shrink (GtkPicture *self)
  * gtk_picture_set_content_fit: (attributes org.gtk.Method.set_property=content-fit)
  * @self: a `GtkPicture`
  * @content_fit: the content fit mode
- *
- * Sets how the content should be resized to fit the `GtkPicture`.
+ * @brief: 设置内容（图片）应该如何变化尺寸去适应控件区域去显示
  *
  * See [enum@Gtk.ContentFit] for details.
  *
@@ -1034,6 +1031,8 @@ gtk_picture_get_content_fit (GtkPicture *self)
  * gtk_picture_set_alternative_text: (attributes org.gtk.Method.set_property=alternative-text)
  * @self: a `GtkPicture`
  * @alternative_text: (nullable): a textual description of the contents
+ * @brief: 用文本的描述控件显示的内容
+ *         暂时没有发现有什么作用（可能在视觉障碍中使用？）
  *
  * Sets an alternative textual description for the picture contents.
  *
