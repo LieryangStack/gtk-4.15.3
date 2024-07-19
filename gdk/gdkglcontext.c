@@ -329,6 +329,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   forward_bit = gdk_gl_context_get_forward_compatible (context);
 
+  /* 是否允许创建不绑定到任何特定配置（EGLConfig）的EGL上下文（EGLContext） */
   if (display->have_egl_no_config_context)
     egl_config = NULL;
   else

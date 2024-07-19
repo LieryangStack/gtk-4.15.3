@@ -136,12 +136,6 @@ gboolean     gdk_display_get_setting (GdkDisplay *display,
                                       const char *name,
                                       GValue     *value);
 
-GDK_AVAILABLE_IN_ALL
-gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
-
-GDK_AVAILABLE_IN_ALL
-gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
-
 GDK_AVAILABLE_IN_4_14
 GdkDmabufFormats *
              gdk_display_get_dmabuf_formats (GdkDisplay *display);

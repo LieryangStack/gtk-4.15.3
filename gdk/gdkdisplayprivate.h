@@ -126,7 +126,7 @@ struct _GdkDisplay
 
   /* egl info */
   guint have_egl_buffer_age : 1;
-  guint have_egl_no_config_context : 1;
+  guint have_egl_no_config_context : 1;  /* 这是一个EGL扩展，允许egl_context不绑定特定的egl_config */
   guint have_egl_pixel_format_float : 1;
   guint have_egl_dma_buf_import : 1;
   guint have_egl_dma_buf_export : 1;
@@ -247,7 +247,9 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *display
                                                        gpointer          native_display,
                                                        gboolean          allow_any,
                                                        GError          **error);
-
+                                          
+gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
 gpointer            gdk_display_get_egl_config_high_depth
                                                       (GdkDisplay       *display);
 
