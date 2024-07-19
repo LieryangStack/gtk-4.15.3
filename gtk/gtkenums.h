@@ -132,25 +132,17 @@ typedef enum
   GTK_BASELINE_POSITION_BOTTOM
 } GtkBaselinePosition;
 
+
 /**
  * GtkContentFit:
- * @GTK_CONTENT_FIT_FILL: Make the content fill the entire allocation,
- *   without taking its aspect ratio in consideration. The resulting
- *   content will appear as stretched if its aspect ratio is different
- *   from the allocation aspect ratio.
- * @GTK_CONTENT_FIT_CONTAIN: Scale the content to fit the allocation,
- *   while taking its aspect ratio in consideration. The resulting
- *   content will appear as letterboxed if its aspect ratio is different
- *   from the allocation aspect ratio.
- * @GTK_CONTENT_FIT_COVER: Cover the entire allocation, while taking
- *   the content aspect ratio in consideration. The resulting content
- *   will appear as clipped if its aspect ratio is different from the
- *   allocation aspect ratio.
- * @GTK_CONTENT_FIT_SCALE_DOWN: The content is scaled down to fit the
- *   allocation, if needed, otherwise its original size is used.
- *
- * Controls how a content should be made to fit inside an allocation.
- *
+ * @GTK_CONTENT_FIT_FILL: 使图片内容填满整个控件区域，不考虑长宽比。
+ *                        如果图片原始长宽比跟控件区域长宽比不同，图片在控件中显的被拉伸。
+ * @GTK_CONTENT_FIT_CONTAIN: 按照原始图片的长宽比分配到控件区域。
+ *                           如果控件区域的长宽比和图片长宽比不一样，图片的侧面就会有空白栏
+ * @GTK_CONTENT_FIT_COVER: 覆盖整个控件区域，同时考虑图片的长宽比。
+ *                         如果图片的长宽比跟空间区域的长宽比不一样，显示图片可能会被裁剪。
+ * @GTK_CONTENT_FIT_SCALE_DOWN: 可以按长宽比缩小图片显示，但是不能放大，超过原始图片大小后，以图片原始大小显示。
+ * 
  * Since: 4.8
  */
 typedef enum

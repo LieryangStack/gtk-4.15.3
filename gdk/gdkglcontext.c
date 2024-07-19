@@ -584,7 +584,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
     return FALSE;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
-  g_print ("%s = %p, surfaceless = %d\n", G_OBJECT_TYPE_NAME (surface), surface, surfaceless);
+  // g_print ("%s = %p, surfaceless = %d\n", G_OBJECT_TYPE_NAME (surface), surface, surfaceless);
 
   if (!surfaceless)
     egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
