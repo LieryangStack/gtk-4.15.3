@@ -21,7 +21,7 @@ cairo_req          = '>= 1.18.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 wayland_proto_req  = '>= 1.36'
 wayland_req        = '>= 1.21.0'
-graphene_req       = '>= 1.10.0'
+graphene_req       = '>= 1.11.0'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
@@ -422,6 +422,7 @@ epoxy_dep      = dependency('epoxy', version: epoxy_req)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             default_options: ['tests=false', 'gobject_types=true'])
+
 iso_codes_dep  = dependency('iso-codes', required: false)
 gi_dep         = dependency('gobject-introspection-1.0', version: introspection_req,
                             required: get_option('introspection').enabled() and
