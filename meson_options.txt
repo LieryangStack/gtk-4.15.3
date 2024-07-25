@@ -31,7 +31,7 @@ option('macos-backend',
 
 option('media-gstreamer',
        type: 'feature',
-       value: 'enabled',
+       value: 'auto',
        description : 'Build the gstreamer media backend')
 
 # Print backends
@@ -82,7 +82,7 @@ option('f16c',
 
 option('introspection',
        type: 'feature',
-       value: 'auto',
+       value: 'enabled',
        yield: true,
        description : 'Build introspection data (requires gobject-introspection)')
 
