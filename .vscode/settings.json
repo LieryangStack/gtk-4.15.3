@@ -1,5 +1,5 @@
 {
-  "C_Cpp.default.compileCommands": "/opt/src/gtk-4.15.3/builddir/compile_commands.json",
+  "C_Cpp.default.compileCommands": "/home/lieryang/Desktop/gtk-4.15.3/builddir/compile_commands.json",
   "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
   "files.associations": {
     "paintable.h": "c",
