@@ -31,7 +31,7 @@ option('macos-backend',
 
 option('media-gstreamer',
        type: 'feature',
-       value: 'auto',
+       value: 'enabled',
        description : 'Build the gstreamer media backend')
 
 # Print backends
