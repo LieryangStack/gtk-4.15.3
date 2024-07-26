@@ -12,4 +12,4 @@ sudo mv pixman-1.pc pixman-1.pc.backup
 # libadwaita
 
 sudo apt install -y libcurl4-openssl-dev libyaml-dev libzstd-dev
-sudo apt install -y gperf gettext itstool xsltproc docbook-xsl
+sudo apt install -y gperf gettext itstool xsltproc docbook-xsl libxml2-dev
