@@ -3,7 +3,7 @@
 sudo apt install libxml2-utils # 解决 XMLLINT
 
 sudo apt install -y libcairo2-dev x11-xserver-utils libxrandr-dev libxi-dev libxcursor-dev
-sudo apt install -y libxdamage-dev libxinerama-dev highlight
+sudo apt install -y libxdamage-dev libxinerama-dev highlight libdrm-dev
 
 
 cd /usr/lib/aarch64-linux-gnu/pkgconfig
