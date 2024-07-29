@@ -3023,10 +3023,10 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
    *                               GdkX11Toplevel渲染前需要创建EGLSurface
    */
   gdk_x11_display_init_leader_surface (self);
-  g_print ("%s = %p\n", G_OBJECT_TYPE_NAME(self), self);
-  g_print ("%s->leader_gdk_surface(%s) = %p\n", G_OBJECT_TYPE_NAME(self), 
-                                                G_OBJECT_TYPE_NAME(self->leader_gdk_surface), 
-                                                self->leader_gdk_surface);
+  // g_print ("%s = %p\n", G_OBJECT_TYPE_NAME(self), self);
+  // g_print ("%s->leader_gdk_surface(%s) = %p\n", G_OBJECT_TYPE_NAME(self), 
+  //                                               G_OBJECT_TYPE_NAME(self->leader_gdk_surface), 
+  //                                               self->leader_gdk_surface);
   /* 指定GdkSurface，创建GdkX11GLContextEGL */
   if (self->glx_config != NULL)
     return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", self->leader_gdk_surface, NULL);

@@ -1377,7 +1377,7 @@ gdk_display_init_gl (GdkDisplay *self)
    * 创建了 GdkX11DragSurface  GdkX11GLContextEGL
    */
   context = GDK_DISPLAY_GET_CLASS (self)->init_gl (self, &priv->gl_error);
-  g_print ("%s = %p\n",G_OBJECT_TYPE_NAME(context), context);
+  // g_print ("%s = %p\n",G_OBJECT_TYPE_NAME(context), context);
   if (context == NULL)
     return;
 
