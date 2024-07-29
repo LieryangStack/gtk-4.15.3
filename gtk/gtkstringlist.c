@@ -78,7 +78,7 @@
 struct _GtkStringObject
 {
   GObject parent_instance;
-  char *string;
+  char *string; /* 存储字符串 */
 };
 
 enum {
@@ -194,7 +194,7 @@ struct _GtkStringList
 {
   GObject parent_instance;
 
-  Objects items;
+  Objects items; /* 这是一个GdkArray，成员就是GtkStringObject */
 };
 
 struct _GtkStringListClass
