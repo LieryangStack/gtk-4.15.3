@@ -33,7 +33,7 @@ struct _GtkListItem
 
   GtkListItemWidget *owner; /* has a reference */
 
-  GtkWidget *child;
+  GtkWidget *child; /* 这个item拥有的Widget */
 
   char *accessible_label;
   char *accessible_description;

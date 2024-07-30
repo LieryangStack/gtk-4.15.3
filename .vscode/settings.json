@@ -18,6 +18,8 @@
     "gtksnapshotprivate.h": "c",
     "gdkframeclock.h": "c",
     "gtksnapshot.h": "c",
-    "gdkpaintable.h": "c"
+    "gdkpaintable.h": "c",
+    "gtkbuilderlistitemfactory.h": "c",
+    "gtksignallistitemfactory.h": "c"
   }
 }

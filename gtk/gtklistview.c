@@ -225,6 +225,7 @@ gtk_list_view_update_factories_with (GtkListView        *self,
 {
   GtkListTile *tile;
 
+  /* 循环去创建 GtkListItem */
   for (tile = gtk_list_item_manager_get_first (self->item_manager);
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))

@@ -103,8 +103,10 @@ gtk_list_factory_widget_setup_factory (GtkListFactoryWidget *self)
   GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
   gpointer object;
 
+  /* 创建 GtkListItem 对象 */
   object = GTK_LIST_FACTORY_WIDGET_GET_CLASS (self)->create_object (self);
 
+  /* 对 GtkListItem 对象进行操作（可以设置该项的Widget） */
   gtk_list_item_factory_setup (priv->factory,
                                object,
                                gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
