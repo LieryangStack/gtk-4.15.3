@@ -82,7 +82,7 @@ option('f16c',
 
 option('introspection',
        type: 'feature',
-       value: 'disabled',
+       value: 'enabled',
        yield: true,
        description : 'Build introspection data (requires gobject-introspection)')
 

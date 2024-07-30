@@ -41,6 +41,10 @@ guint                   gtk_single_selection_get_selected       (GtkSingleSelect
 GDK_AVAILABLE_IN_ALL
 void                    gtk_single_selection_set_selected       (GtkSingleSelection     *self,
                                                                  guint                   position);
+
+/**
+ * @brief: 得到的是GListModel对象，被选择的位置所对应的数据对象，比如：GtkStringList对象的数据对象就是GtkStringObject，并不是GtkListItem
+ */
 GDK_AVAILABLE_IN_ALL
 gpointer                gtk_single_selection_get_selected_item  (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL

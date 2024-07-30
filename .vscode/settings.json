@@ -20,6 +20,8 @@
     "gtksnapshot.h": "c",
     "gdkpaintable.h": "c",
     "gtkbuilderlistitemfactory.h": "c",
-    "gtksignallistitemfactory.h": "c"
+    "gtksignallistitemfactory.h": "c",
+    "gtklistitem.h": "c",
+    "gtktypes.h": "c"
   }
 }

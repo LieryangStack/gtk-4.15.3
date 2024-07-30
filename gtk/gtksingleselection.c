@@ -687,7 +687,7 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
  * gtk_single_selection_get_selected_item: (attributes org.gtk.Method.get_property=selected-item)
  * @self: a `GtkSingleSelection`
  *
- * Gets the selected item.
+ * 得到的是GListModel对象，被选择的位置所对应的数据对象，比如：GtkStringList对象的数据对象就是GtkStringObject，并不是GtkListItem
  *
  * If no item is selected, %NULL is returned.
  *

@@ -28,8 +28,8 @@ struct _GtkListView
 {
   GtkListBase parent_instance;
 
-  GtkListItemManager *item_manager;
-  GtkListItemFactory *factory;
+  GtkListItemManager *item_manager; /* 这里存储GtkListView中的所有GtkListItem */
+  GtkListItemFactory *factory; /* 创建GtkListItem时候，会调用工厂里面的函数进行创建Widget，然后把Widget赋值给GtkListItem->child */
   GtkListItemFactory *header_factory;
   gboolean show_separators;
   gboolean single_click_activate;
