@@ -225,7 +225,7 @@ typedef struct _GtkExpressionTypeInfo GtkExpressionTypeInfo;
 
 struct _GtkExpression
 {
-  GTypeInstance parent_instance;
+  GTypeInstance parent_instance;  /* 在类型系统创建了一个基类，类似于GOjbject的基类（没有继承GObject） */
 
   gatomicrefcount ref_count;
 
@@ -300,6 +300,7 @@ G_DEFINE_BOXED_TYPE (GtkExpressionWatch, gtk_expression_watch,
 
 #define GTK_EXPRESSION_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_EXPRESSION, GtkExpressionClass))
 
+
 /*< private >
  * GTK_DEFINE_EXPRESSION_TYPE:
  * @TypeName: the type name, in camel case
@@ -313,6 +314,10 @@ G_DEFINE_BOXED_TYPE (GtkExpressionWatch, gtk_expression_watch,
  *
  * You can specify code to be run after the type registration; the `GType` of
  * the event is available in the `gtk_define_expression_type_id` variable.
+ */
+
+/**
+ * @brief: 这个宏表示：基于 GTK_TYPE_EXPRESSION 定义的TypeName对象
  */
 #define GTK_DEFINE_EXPRESSION_TYPE(TypeName, type_name, type_info) \
 GType \
