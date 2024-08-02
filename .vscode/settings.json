@@ -22,6 +22,7 @@
     "gtkbuilderlistitemfactory.h": "c",
     "gtksignallistitemfactory.h": "c",
     "gtklistitem.h": "c",
-    "gtktypes.h": "c"
+    "gtktypes.h": "c",
+    "xutil.h": "c"
   }
 }

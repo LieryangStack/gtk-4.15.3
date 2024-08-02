@@ -1161,42 +1161,42 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
   /* This isn't actually WM_PROTOCOLS because that wouldn't leave enough space
    * in the message for everything that gets stuffed in */
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
-    {
-      GdkX11Surface *surface_impl;
-      surface_impl = GDK_X11_SURFACE (win);
-      if (surface_impl->toplevel)
-        {
-          guint32 d0 = xevent->xclient.data.l[0];
-          guint32 d1 = xevent->xclient.data.l[1];
-          guint32 d2 = xevent->xclient.data.l[2];
-          guint32 d3 = xevent->xclient.data.l[3];
+  {
+    GdkX11Surface *surface_impl;
+    surface_impl = GDK_X11_SURFACE (win);
+    if (surface_impl->toplevel)
+      {
+        guint32 d0 = xevent->xclient.data.l[0];
+        guint32 d1 = xevent->xclient.data.l[1];
+        guint32 d2 = xevent->xclient.data.l[2];
+        guint32 d3 = xevent->xclient.data.l[3];
 
-          guint64 serial = ((guint64)d1 << 32) | d0;
-          gint64 frame_drawn_time = server_time_to_monotonic_time (GDK_X11_DISPLAY (display), ((guint64)d3 << 32) | d2);
-          gint64 refresh_interval, presentation_time;
+        guint64 serial = ((guint64)d1 << 32) | d0;
+        gint64 frame_drawn_time = server_time_to_monotonic_time (GDK_X11_DISPLAY (display), ((guint64)d3 << 32) | d2);
+        gint64 refresh_interval, presentation_time;
 
-          GdkFrameClock *clock = gdk_surface_get_frame_clock (win);
-          GdkFrameTimings *timings = find_frame_timings (clock, serial);
+        GdkFrameClock *clock = gdk_surface_get_frame_clock (win);
+        GdkFrameTimings *timings = find_frame_timings (clock, serial);
 
-          if (timings)
-            timings->drawn_time = frame_drawn_time;
+        if (timings)
+          timings->drawn_time = frame_drawn_time;
 
-          if (!surface_impl->toplevel->frame_still_painting && surface_impl->toplevel->frame_pending)
-            {
-              surface_impl->toplevel->frame_pending = FALSE;
-              gdk_surface_thaw_updates (win);
-            }
+        if (!surface_impl->toplevel->frame_still_painting && surface_impl->toplevel->frame_pending)
+          {
+            surface_impl->toplevel->frame_pending = FALSE;
+            gdk_surface_thaw_updates (win);
+          }
 
-          gdk_frame_clock_get_refresh_info (clock,
-                                            frame_drawn_time,
-                                            &refresh_interval,
-                                            &presentation_time);
-          if (presentation_time != 0)
-            surface_impl->toplevel->throttled_presentation_time = presentation_time + refresh_interval;
-        }
+        gdk_frame_clock_get_refresh_info (clock,
+                                          frame_drawn_time,
+                                          &refresh_interval,
+                                          &presentation_time);
+        if (presentation_time != 0)
+          surface_impl->toplevel->throttled_presentation_time = presentation_time + refresh_interval;
+      }
 
-      return GDK_FILTER_REMOVE;
-    }
+    return GDK_FILTER_REMOVE;
+  }
 
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_TIMINGS"))
     {
